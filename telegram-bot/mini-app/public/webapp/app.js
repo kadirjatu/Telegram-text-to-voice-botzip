@@ -18,8 +18,11 @@ const statusMsg = document.getElementById("statusMsg");
 const playerWrap = document.getElementById("playerWrap");
 const player = document.getElementById("player");
 const downloadLink = document.getElementById("downloadLink");
+const rateSelect = document.getElementById("rateSelect");
+const pitchSelect = document.getElementById("pitchSelect");
+const volumeSelect = document.getElementById("volumeSelect");
 
-let selectedLanguage = null;
+let selectedLanguage = null;  // null = none chosen, "auto" = auto-detect
 let selectedGender = "female";
 let currentAudioUrl = null;
 
@@ -37,6 +40,7 @@ genderButtons.forEach((btn) => {
 });
 
 function updateGenerateEnabled() {
+  // "auto" counts as a valid language selection
   generateBtn.disabled = !(textEl.value.trim() && selectedLanguage);
 }
 
@@ -59,6 +63,20 @@ async function loadLanguages() {
 
 function renderLanguages(languages, unsupported, defaultLanguage) {
   languageGrid.innerHTML = "";
+
+  // Auto-detect chip — first in the list
+  const autoChip = document.createElement("button");
+  autoChip.type = "button";
+  autoChip.className = "chip auto-chip";
+  autoChip.textContent = "🔍 Auto-detect";
+  autoChip.title = "Automatically detect the language from your text";
+  autoChip.addEventListener("click", () => {
+    selectedLanguage = "auto";
+    Array.from(languageGrid.querySelectorAll(".chip")).forEach((c) => c.classList.remove("active"));
+    autoChip.classList.add("active");
+    updateGenerateEnabled();
+  });
+  languageGrid.appendChild(autoChip);
 
   languages.forEach((name) => {
     const chip = document.createElement("button");
@@ -102,7 +120,14 @@ generateBtn.addEventListener("click", async () => {
     const res = await fetch(`${API_BASE}/generate`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text, language: selectedLanguage, gender: selectedGender }),
+      body: JSON.stringify({
+        text,
+        language: selectedLanguage,   // "auto" or a language name
+        gender: selectedGender,
+        rate: rateSelect.value,
+        pitch: pitchSelect.value,
+        volume: volumeSelect.value,
+      }),
     });
 
     if (!res.ok) {

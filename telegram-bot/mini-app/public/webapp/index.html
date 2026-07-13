@@ -37,6 +37,42 @@
           <button type="button" class="gender-btn" data-gender="male">♂ Male</button>
         </div>
 
+        <details class="settings-details">
+          <summary class="settings-summary">⚙️ Advanced Settings</summary>
+          <div class="settings-grid">
+            <div class="setting-row">
+              <label class="setting-label" for="rateSelect">Speed</label>
+              <select id="rateSelect" class="setting-select">
+                <option value="-5%">Slow</option>
+                <option value="-2%">Slightly Slow</option>
+                <option value="+0%" selected>Normal</option>
+                <option value="+2%">Slightly Fast</option>
+                <option value="+5%">Fast</option>
+              </select>
+            </div>
+            <div class="setting-row">
+              <label class="setting-label" for="pitchSelect">Pitch</label>
+              <select id="pitchSelect" class="setting-select">
+                <option value="-2Hz">Low</option>
+                <option value="-1Hz">Slightly Low</option>
+                <option value="+0Hz" selected>Normal</option>
+                <option value="+1Hz">Slightly High</option>
+                <option value="+2Hz">High</option>
+              </select>
+            </div>
+            <div class="setting-row">
+              <label class="setting-label" for="volumeSelect">Volume</label>
+              <select id="volumeSelect" class="setting-select">
+                <option value="-50%">Very Quiet</option>
+                <option value="-25%">Quiet</option>
+                <option value="+0%" selected>Normal</option>
+                <option value="+25%">Loud</option>
+                <option value="+50%">Very Loud</option>
+              </select>
+            </div>
+          </div>
+        </details>
+
         <button id="generateBtn" class="generate-btn" disabled>
           <span id="generateBtnLabel">✨ Generate Voice</span>
         </button>

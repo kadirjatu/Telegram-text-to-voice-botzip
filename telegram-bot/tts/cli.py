@@ -30,8 +30,15 @@ def _cmd_languages() -> dict:
 
 async def _cmd_generate(payload: dict) -> dict:
     text = (payload.get("text") or "").strip()
-    language = payload.get("language") or config.DEFAULT_LANGUAGE
+    raw_language = payload.get("language") or "auto"
     gender = (payload.get("gender") or config.DEFAULT_GENDER).lower()
+
+    # Auto-detect: try to detect language from text, fall back to default.
+    if raw_language == "auto":
+        detected = voices.detect_language(text)
+        language = detected or config.DEFAULT_LANGUAGE
+    else:
+        language = raw_language
     rate = payload.get("rate") or config.DEFAULT_RATE
     pitch = payload.get("pitch") or config.DEFAULT_PITCH
     volume = payload.get("volume") or config.DEFAULT_VOLUME

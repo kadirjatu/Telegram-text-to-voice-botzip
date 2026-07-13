@@ -21,7 +21,8 @@ export const MINI_APP_PUBLIC_DIR = path.join(API_SERVER_DIR, "public", "webapp")
 export const TTS_CACHE_DIR = path.join(TELEGRAM_BOT_DIR, "data", "cache");
 
 const PYTHON_BIN_CANDIDATES = [
-  path.join(REPO_ROOT, ".pythonlibs", "bin", "python3"),
+  path.join(REPO_ROOT, ".venv", "bin", "python3"),          // uv / Docker (Railway)
+  path.join(REPO_ROOT, ".pythonlibs", "bin", "python3"),    // Replit dev
   "python3",
 ];
 
