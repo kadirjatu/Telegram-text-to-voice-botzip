@@ -9,12 +9,23 @@ const API_BASE = "/api/mini-app";
 // default). Users can freely override these after selection.
 // ---------------------------------------------------------------------------
 const LANGUAGE_DEFAULTS = {
-  Urdu: { rate: "-5%", pitch: "+0Hz", volume: "+0%" },
+  // When Urdu is selected: Female voice (ur-PK-UzmaNeural) is the default;
+  // Male (ur-PK-AsadNeural) is available via the gender toggle as usual.
+  Urdu: { gender: "female", rate: "-5%", pitch: "+0Hz", volume: "+0%" },
 };
 
 function applyLanguageDefaults(languageName) {
   const defaults = LANGUAGE_DEFAULTS[languageName];
   if (!defaults) return;
+  // Reset gender to the language default (user can still override via toggle).
+  if (defaults.gender) {
+    genderButtons.forEach((b) => b.classList.remove("active"));
+    const targetBtn = genderButtons.find((b) => b.dataset.gender === defaults.gender);
+    if (targetBtn) {
+      targetBtn.classList.add("active");
+      selectedGender = defaults.gender;
+    }
+  }
   rateSelect.value   = defaults.rate;
   pitchSelect.value  = defaults.pitch;
   volumeSelect.value = defaults.volume;
