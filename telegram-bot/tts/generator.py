@@ -84,7 +84,7 @@ async def _stream_one(text: str, voice: str, rate: str, pitch: str, volume: str,
         raise EdgeServiceError(f"Speech generation failed: {exc}") from exc
 
 
-async def _concat_with_pauses(part_paths: list[Path], out_path: Path) -> None:
+async def _concat_with_pauses(part_paths: list[Path], out_path: Path, pause_sec: float = 0.3) -> None:
     """
     Stitch per-sentence mp3s into one file with a short silence gap between
     each, so the voice note breathes at sentence boundaries instead of
@@ -107,7 +107,7 @@ async def _concat_with_pauses(part_paths: list[Path], out_path: Path) -> None:
     try:
         gen = await asyncio.create_subprocess_exec(
             "ffmpeg", "-y", "-f", "lavfi", "-i", "anullsrc=r=24000:cl=mono",
-            "-t", "0.3", "-q:a", "9", str(silence_path),
+            "-t", str(round(pause_sec, 3)), "-q:a", "9", str(silence_path),
             stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE,
         )
         _, gen_err = await gen.communicate()
@@ -142,7 +142,7 @@ async def _concat_with_pauses(part_paths: list[Path], out_path: Path) -> None:
         silence_path.unlink(missing_ok=True)
 
 
-async def _text_to_mp3(text: str, voice: str, rate: str, pitch: str, volume: str, mp3_path: Path) -> None:
+async def _text_to_mp3(text: str, voice: str, rate: str, pitch: str, volume: str, mp3_path: Path, pause_sec: float = 0.3) -> None:
     """
     Generate mp3 audio for `text`. Single-sentence text goes straight
     through one Edge-TTS request exactly as before; multi-sentence text is
@@ -160,7 +160,7 @@ async def _text_to_mp3(text: str, voice: str, rate: str, pitch: str, volume: str
             part_path = utils.new_temp_path(config.TEMP_DIR, f".part{i}.mp3")
             await _stream_one(segment, voice, rate, pitch, volume, part_path)
             temp_parts.append(part_path)
-        await _concat_with_pauses(temp_parts, mp3_path)
+        await _concat_with_pauses(temp_parts, mp3_path, pause_sec=pause_sec)
     finally:
         for p in temp_parts:
             p.unlink(missing_ok=True)
@@ -214,6 +214,7 @@ async def generate_voice_note(
     rate: str = config.DEFAULT_RATE,
     pitch: str = config.DEFAULT_PITCH,
     volume: str = config.DEFAULT_VOLUME,
+    pause_sec: float = 0.3,
     cancel_event: Optional[asyncio.Event] = None,
 ) -> GeneratedVoice:
     """
@@ -247,7 +248,7 @@ async def generate_voice_note(
     start = time.monotonic()
     try:
         tts_task = asyncio.create_task(
-            _text_to_mp3(text, voice, rate, pitch, volume, mp3_path)
+            _text_to_mp3(text, voice, rate, pitch, volume, mp3_path, pause_sec=pause_sec)
         )
         if cancel_event is not None:
             cancel_wait = asyncio.create_task(cancel_event.wait())

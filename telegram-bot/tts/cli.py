@@ -43,6 +43,16 @@ async def _cmd_generate(payload: dict) -> dict:
     pitch = payload.get("pitch") or config.DEFAULT_PITCH
     volume = payload.get("volume") or config.DEFAULT_VOLUME
 
+    # Urdu-specific defaults: only applied when the caller did not explicitly
+    # send these values (bot path -- mini-app sends them from the UI).
+    if language == "Urdu":
+        if not payload.get("rate"):
+            rate = "-5%"
+        if not payload.get("pitch"):
+            pitch = "+0Hz"
+        if not payload.get("volume"):
+            volume = "+0%"
+
     if not text:
         return {"ok": False, "error": "empty_text"}
 
@@ -60,9 +70,14 @@ async def _cmd_generate(payload: dict) -> dict:
     # just the original words read with that language's accent.
     text = translator.translate_text(text, language)
 
+    # Urdu gets a slightly longer inter-sentence pause (400 ms) for a more
+    # natural, human-like cadence. All other languages keep the default 300 ms.
+    pause_sec = 0.4 if language == "Urdu" else 0.3
+
     try:
         result = await generator.generate_voice_note(
-            text=text, voice=voice, rate=rate, pitch=pitch, volume=volume
+            text=text, voice=voice, rate=rate, pitch=pitch, volume=volume,
+            pause_sec=pause_sec,
         )
     except generator.TTSError as exc:
         return {"ok": False, "error": str(exc)}

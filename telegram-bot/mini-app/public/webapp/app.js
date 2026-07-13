@@ -2,6 +2,24 @@
 // No build step -- plain HTML/CSS/JS, kept intentionally simple.
 const API_BASE = "/api/mini-app";
 
+// ---------------------------------------------------------------------------
+// Language-specific default settings.
+// Called whenever a language chip is selected. Only Urdu has custom defaults;
+// all other languages are left at whatever the user last set (or the HTML
+// default). Users can freely override these after selection.
+// ---------------------------------------------------------------------------
+const LANGUAGE_DEFAULTS = {
+  Urdu: { rate: "-5%", pitch: "+0Hz", volume: "+0%" },
+};
+
+function applyLanguageDefaults(languageName) {
+  const defaults = LANGUAGE_DEFAULTS[languageName];
+  if (!defaults) return;
+  rateSelect.value   = defaults.rate;
+  pitchSelect.value  = defaults.pitch;
+  volumeSelect.value = defaults.volume;
+}
+
 const tg = window.Telegram && window.Telegram.WebApp;
 if (tg) {
   tg.ready();
@@ -87,6 +105,7 @@ function renderLanguages(languages, unsupported, defaultLanguage) {
       selectedLanguage = name;
       Array.from(languageGrid.querySelectorAll(".chip")).forEach((c) => c.classList.remove("active"));
       chip.classList.add("active");
+      applyLanguageDefaults(name);   // apply Urdu (or future) defaults automatically
       updateGenerateEnabled();
     });
     languageGrid.appendChild(chip);
