@@ -1,0 +1,310 @@
+Convert my existing Edge-TTS Telegram bot project into an OpenAI-compatible TTS API server.
+
+IMPORTANT:
+
+This is NOT a new project.
+
+Do NOT rewrite any working code.
+
+Do NOT delete any existing functionality.
+
+Do NOT refactor unrelated code.
+
+Do NOT rename existing functions unless absolutely necessary.
+
+Keep backward compatibility 100%.
+
+Only add an OpenAI-compatible REST API layer on top of the existing Edge-TTS engine.
+
+The current Edge-TTS generation logic is already working correctly.
+
+Reuse the existing TTS generation code instead of rewriting it.
+
+==================================================
+PROJECT STACK
+==================================================
+
+Python 3.11+
+
+FastAPI
+
+Uvicorn
+
+edge-tts
+
+aiofiles
+
+FFmpeg
+
+python-multipart
+
+Pydantic
+
+==================================================
+OBJECTIVE
+==================================================
+
+Expose the existing Edge-TTS engine through an OpenAI-compatible REST API.
+
+The API must be compatible with my main Telegram bot.
+
+The main bot should only need:
+
+TTS_BASE_URL
+
+TTS_API_KEY
+
+TTS_MODEL
+
+to communicate with this API.
+
+==================================================
+API ENDPOINTS
+==================================================
+
+GET /health
+
+Return:
+
+{
+    "status":"ok"
+}
+
+--------------------------------------------------
+
+GET /v1/models
+
+Return
+
+{
+  "object":"list",
+  "data":[
+      {
+          "id":"edge-tts",
+          "object":"model"
+      }
+  ]
+}
+
+--------------------------------------------------
+
+GET /v1/audio/voices
+
+Return every available Edge voice.
+
+Each voice should include
+
+Voice ID
+
+Gender
+
+Locale
+
+Language
+
+Friendly Name
+
+Example
+
+{
+"id":"en-US-AriaNeural",
+"name":"Aria",
+"gender":"Female",
+"locale":"en-US",
+"language":"English"
+}
+
+--------------------------------------------------
+
+POST /v1/audio/speech
+
+OpenAI-compatible request body
+
+Example
+
+{
+    "model":"edge-tts",
+    "input":"Hello World",
+    "voice":"en-US-AriaNeural",
+    "response_format":"opus"
+}
+
+==================================================
+SUPPORTED RESPONSE FORMATS
+==================================================
+
+mp3
+
+wav
+
+ogg
+
+opus
+
+Default:
+
+opus
+
+==================================================
+AUDIO GENERATION
+==================================================
+
+Reuse the existing Edge-TTS generation logic.
+
+Do not rewrite it.
+
+Generate MP3 if required.
+
+Automatically convert to OGG/Opus using FFmpeg when response_format=opus.
+
+==================================================
+STREAMING
+==================================================
+
+Return StreamingResponse whenever possible.
+
+Otherwise return FileResponse.
+
+==================================================
+API AUTHENTICATION
+==================================================
+
+Use
+
+Authorization:
+
+Bearer YOUR_API_KEY
+
+Read API key from
+
+.env
+
+Example
+
+API_KEY=xxxxxxxxxxxxxxxx
+
+Reject unauthorized requests.
+
+Return HTTP 401.
+
+==================================================
+ENVIRONMENT VARIABLES
+==================================================
+
+HOST=0.0.0.0
+
+PORT=8000
+
+API_KEY=xxxxxxxx
+
+DEFAULT_MODEL=edge-tts
+
+TEMP_DIR=temp
+
+==================================================
+PROJECT STRUCTURE
+==================================================
+
+app.py
+
+api.py
+
+generator.py
+
+voices.py
+
+models.py
+
+config.py
+
+utils.py
+
+requirements.txt
+
+.env.example
+
+Do not merge everything into one file.
+
+==================================================
+ERROR HANDLING
+==================================================
+
+Handle
+
+Invalid API key
+
+Missing text
+
+Invalid voice
+
+Unsupported response format
+
+Edge-TTS failure
+
+FFmpeg failure
+
+Missing FFmpeg
+
+Unexpected exceptions
+
+Return proper JSON errors.
+
+==================================================
+ASYNC
+==================================================
+
+Everything must use async/await.
+
+Never block FastAPI.
+
+==================================================
+LOGGING
+==================================================
+
+Log
+
+Timestamp
+
+Client IP
+
+User-Agent
+
+Voice
+
+Characters
+
+Generation Time
+
+Errors
+
+==================================================
+OPENAPI
+==================================================
+
+Enable automatic Swagger documentation.
+
+Use FastAPI default docs.
+
+==================================================
+FINAL REQUIREMENTS
+==================================================
+
+Return COMPLETE production-ready code.
+
+No placeholders.
+
+No TODO comments.
+
+No pseudo code.
+
+No fake implementations.
+
+Reuse my existing Edge-TTS generation code.
+
+Only add the API layer.
+
+The final project must run with:
+
+uvicorn app:app --host 0.0.0.0 --port 8000
+
+and be directly usable by my main Telegram bot.

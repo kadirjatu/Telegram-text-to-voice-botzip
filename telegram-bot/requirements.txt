@@ -1,0 +1,8 @@
+# Dependencies for the Telegram bot service (used for standalone/Docker/Railway deploys).
+# Kept in sync with the packages actually imported by bot.py and the tts/ package.
+python-telegram-bot>=22.8
+edge-tts>=7.2.8
+deep-translator>=1.11.4
+langdetect>=1.0.9
+python-dotenv>=1.2.2
+aiofiles>=25.1.0

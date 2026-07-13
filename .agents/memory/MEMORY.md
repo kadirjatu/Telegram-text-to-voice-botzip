@@ -1,0 +1,7 @@
+- [Python services outside artifacts](python-services-outside-artifacts.md) — no artifact type fits a polling bot/service; run it as a plain root-level `configureWorkflow`, not `createArtifact`.
+- [Reusing Python logic from a Node service](polyglot-cli-bridge.md) — shell out via a JSON stdin/stdout CLI instead of reimplementing business logic in a second language.
+- [edge-tts blocks custom SSML](edge-tts-no-custom-ssml.md) — free backend rejects injected `<break>`/`<emphasis>` tags; use sentence-split + audio concat for pauses instead.
+- [Shared api-server missing after git import](git-imported-api-server.md) — template's api-server/mockup-sandbox never auto-register as artifacts on git import; fix with pnpm install + plain configureWorkflow, not createArtifact.
+- [Sharing Python TTS logic across two Python services](python-sibling-package-import.md) — a second same-language service can `sys.path.insert` the sibling package and import it directly; only cross-language reuse needs the CLI-bridge pattern.
+- [Plain workflow public HTTPS exposure on PNPM_WORKSPACE stack](plain-workflow-public-exposure-pnpm-stack.md) — once any artifact is registered, proxy routes only artifact paths; a plain workflow's port needs an explicit `[[ports]]` mapping to be publicly reachable.
+- [Mini App URL cross-platform domain](mini-app-url-cross-platform-domain.md) — Telegram WebApp button URL must resolve per-host public domain var (Railway/Replit/manual), not one hardcoded env var.

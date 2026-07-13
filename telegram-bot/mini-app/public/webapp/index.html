@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Text to Voice</title>
+    <link rel="icon" href="data:," />
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="header">
+        <div class="logo">🎤</div>
+        <h1>Text to Voice</h1>
+        <p class="subtitle">Type your text, pick a language &amp; voice, get a spoken message.</p>
+      </header>
+
+      <main class="card">
+        <label class="field-label" for="text">Your text</label>
+        <textarea
+          id="text"
+          maxlength="5000"
+          placeholder="Yahan apna text likho..."
+          rows="5"
+        ></textarea>
+        <div class="char-count"><span id="charCount">0</span> / 5000</div>
+
+        <div class="field-label">Language</div>
+        <div id="languageGrid" class="chip-grid" aria-live="polite">
+          <div class="loading">Loading languages…</div>
+        </div>
+
+        <div class="field-label">Voice</div>
+        <div class="gender-toggle">
+          <button type="button" class="gender-btn active" data-gender="female">♀ Female</button>
+          <button type="button" class="gender-btn" data-gender="male">♂ Male</button>
+        </div>
+
+        <button id="generateBtn" class="generate-btn" disabled>
+          <span id="generateBtnLabel">✨ Generate Voice</span>
+        </button>
+
+        <p id="statusMsg" class="status-msg"></p>
+
+        <div id="playerWrap" class="player-wrap hidden">
+          <audio id="player" controls></audio>
+          <a id="downloadLink" class="download-link" download="voice-message.ogg">⬇ Download</a>
+        </div>
+      </main>
+
+      <footer class="footer">Powered by Microsoft Edge TTS</footer>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,13 @@
+[project]
+name = "repl-nix-workspace"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.11"
+dependencies = [
+    "aiofiles>=25.1.0",
+    "deep-translator>=1.11.4",
+    "edge-tts>=7.2.8",
+    "langdetect>=1.0.9",
+    "python-dotenv>=1.2.2",
+    "python-telegram-bot>=22.8",
+]

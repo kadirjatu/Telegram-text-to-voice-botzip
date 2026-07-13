@@ -1,0 +1,406 @@
+Integrate Microsoft Edge-TTS into my existing Python Telegram Bot.
+
+IMPORTANT:
+This is NOT a new project.
+Do NOT create a new Telegram bot.
+Do NOT modify unrelated code.
+
+IMPORTANT:
+
+This is a production project.
+
+Do NOT rewrite any working code.
+
+Do NOT delete any existing functionality.
+
+Do NOT rename functions unless absolutely necessary.
+
+Do NOT change imports unless required.
+
+Do NOT refactor unrelated code.
+
+Do NOT modify existing bot logic.
+
+Only implement the requested feature.
+
+Keep backward compatibility 100%.
+
+If an existing function must be changed, make the smallest possible change.
+
+If unsure, stop and ask instead of guessing.
+
+Only integrate Text-to-Speech functionality into my existing bot.
+
+========================
+PROJECT REQUIREMENTS
+========================
+
+Language:
+- Python 3.11+
+
+Telegram Library:
+- Use the same library already used by my existing bot.
+- Do not change the bot architecture.
+
+TTS Engine:
+- edge-tts
+- No API Key
+- No Microsoft Azure
+- Fully Offline (except Edge TTS service)
+- Fast Streaming
+
+Package:
+
+pip install edge-tts
+
+========================
+FEATURES
+========================
+
+Create a new feature called:
+
+🎤 Text To Voice
+
+Flow:
+
+User sends command
+
+/tts
+
+Bot replies:
+
+"Send me the text you want to convert into speech."
+
+User sends text.
+
+Bot generates speech using Edge-TTS.
+
+Bot sends voice/audio back.
+
+========================
+SUPPORTED LANGUAGES
+========================
+
+Auto detect language if possible. Aur user select the languages user have a option 
+
+If auto detection isn't reliable then provide language selection.
+
+Support at least:
+
+English
+
+Hindi
+
+Urdu
+
+Arabic
+
+French
+
+Spanish
+
+Russian
+
+Japanese
+
+Korean
+
+Chinese
+
+German
+
+Italian
+
+Portuguese
+
+Turkish
+
+Indonesian
+
+Vietnamese
+
+Thai
+
+Bengali
+
+Tamil
+
+Telugu
+
+Punjabi
+
+Gujarati
+
+Marathi
+
+Malayalam
+
+Kannada
+
+========================
+VOICE SUPPORT
+========================
+
+Allow users to select voice option 
+
+Example:
+
+English Male
+
+English Female
+
+Hindi Male
+
+Hindi Female
+
+Urdu Male
+
+Urdu Female
+
+etc.
+
+Use official Edge voices.
+
+========================
+VOICE SETTINGS option user select menu ally 
+========================
+
+Support:
+
+Rate
+
+Pitch
+
+Volume
+
+Default:
+
+Rate = 0%
+
+Pitch = 0Hz
+
+Volume = +0%
+
+========================
+OUTPUT FORMAT
+========================
+
+Generate MP3.
+
+Then automatically convert to OGG OPUS for Telegram Voice Message.
+
+Use FFmpeg if needed.
+
+Bot should send:
+
+Telegram Voice Message
+
+not just an audio file.
+
+========================
+TEXT LIMIT
+========================
+
+Support up to:
+
+5000 characters
+
+If text is longer:
+
+Automatically split into chunks.
+
+Generate multiple audio parts.
+
+Send sequentially.
+
+========================
+ERROR HANDLING
+========================
+
+Handle:
+
+Network failure
+
+Edge service unavailable
+
+Empty text
+
+Unsupported characters
+
+Telegram timeout
+
+FFmpeg missing
+
+File creation failure
+
+User cancelled request
+
+========================
+PERFORMANCE
+========================
+
+Everything must be asynchronous.
+
+Never block bot.
+
+Use asyncio.
+
+Delete temporary files automatically. Only limit 2 file therd well be aper older delete automatically 
+
+========================
+PROGRESS MESSAGE
+========================
+
+While generating:
+
+🎤 Generating Voice...
+
+After completion:
+
+✅ Voice Generated Successfully
+
+========================
+DIRECT TEXT SUPPORT
+========================
+
+If user sends:
+
+/tts Hello everyone
+
+Generate immediately without asking again.
+
+========================
+REPLY SUPPORT
+========================
+
+If user replies to a text message with:
+
+/tts
+
+Convert replied text.
+
+========================
+GROUP SUPPORT
+========================
+
+Work in:
+
+Private Chat
+
+Groups
+
+Supergroups
+
+========================
+FILE STRUCTURE
+========================
+
+Create clean modular code.
+
+Example:
+
+tts/
+
+config.py
+
+generator.py
+
+voices.py
+
+handlers.py
+
+utils.py
+
+Do NOT put everything in one file.
+
+========================
+CONFIG
+========================
+
+No API Key.
+
+No Azure.
+
+Only:
+
+edge-tts
+
+========================
+DEPENDENCIES
+========================
+
+edge-tts
+
+aiofiles
+
+asyncio
+
+FFmpeg
+
+========================
+QUALITY
+========================
+
+Use highest available quality.
+
+Natural sounding voices.
+
+========================
+VOICE LIST
+========================
+
+Create helper function:
+
+get_available_voices()
+
+Return all Edge voices.
+
+========================
+CACHE
+========================
+
+Optional cache.
+
+If same user requests same text again:
+
+Reuse existing audio.
+
+========================
+LOGGING
+========================
+
+Log:
+
+User ID
+
+Selected Voice
+
+Characters
+
+Generation Time
+
+Errors
+
+========================
+SECURITY
+========================
+
+Sanitize filenames.
+
+Prevent path traversal.
+
+Auto delete temp files.
+
+========================
+FINAL REQUIREMENT
+========================
+
+Return COMPLETE production-ready code.
+
+No placeholders.
+
+No TODO comments.
+
+No pseudo code.
+
+Everything must be fully working and directly pluggable into my existing Telegram bot. Bahi yeh add kar ker Jo Jo Abhi tune details main htaya hai na woh sab bhi is main add kar de aur yeh prompt mareko ek hi Line main hona 
