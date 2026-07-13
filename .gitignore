@@ -53,7 +53,6 @@ telegram-bot/data/
 __pycache__/
 *.pyc
 .pythonlibs/
-uv.lock
 
 # Python / TTS OpenAI-compatible API
 tts-api/temp/
