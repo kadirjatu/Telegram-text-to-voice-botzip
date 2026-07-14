@@ -97,6 +97,13 @@ def detect_language(text: str) -> Optional[str]:
 
 def voice_for(language: str, gender: str) -> Optional[str]:
     """Return the Edge-TTS short voice name for a language + gender pair."""
+    # Try the live dynamic registry first (no hardcoded IDs).
+    from . import voice_registry
+    reg = voice_registry.best_voice(language, gender)
+    if reg:
+        return reg
+    # Fall back to the curated LANGUAGES dict (covers the case where the
+    # registry hasn't loaded yet or the network was unavailable on startup).
     entry = LANGUAGES.get(language)
     if not entry:
         return None
@@ -104,8 +111,23 @@ def voice_for(language: str, gender: str) -> Optional[str]:
 
 
 def language_list() -> list[str]:
-    """All selectable (supported) language names, alphabetically sorted."""
-    return sorted(LANGUAGES.keys())
+    """All selectable (supported) language names, alphabetically sorted.
+
+    Merges the hardcoded LANGUAGES dict with the live registry so that:
+    - New Microsoft voices are discovered automatically after restart.
+    - Languages in UNSUPPORTED_LANGUAGES (e.g. Punjabi) are promoted to
+      the supported list as soon as the registry finds a voice for them.
+    """
+    from . import voice_registry
+    combined = set(LANGUAGES.keys()) | set(voice_registry.available_languages())
+    # Keep a language in the "unsupported" bucket only if the live registry
+    # also has no voice for it.
+    still_unsupported = {
+        lang for lang in UNSUPPORTED_LANGUAGES
+        if voice_registry.best_voice(lang, "female") is None
+        and voice_registry.best_voice(lang, "male") is None
+    }
+    return sorted(combined - still_unsupported)
 
 
 async def get_available_voices() -> list[dict]:

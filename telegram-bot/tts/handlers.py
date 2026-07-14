@@ -26,7 +26,7 @@ from telegram.ext import (
     filters,
 )
 
-from . import config, generator, translator, utils, voices
+from . import config, generator, translator, utils, voice_registry, voices
 
 log = utils.get_logger()
 
@@ -97,6 +97,11 @@ async def text_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 
 
 async def _start_voice_selection(update: Update, context: ContextTypes.DEFAULT_TYPE, text: str) -> None:
+    # Ensure the live voice registry is populated before the language keyboard
+    # is shown -- guarantees voice_for() has the dynamic data ready when the
+    # user picks a language + gender (which happens moments later).
+    await voice_registry.ensure_loaded()
+
     message = update.effective_message
     key = _state_key(update)
     text = text.strip()

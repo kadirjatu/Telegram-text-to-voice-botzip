@@ -16,7 +16,7 @@ import asyncio
 import json
 import sys
 
-from . import config, generator, translator, voices
+from . import config, generator, translator, voice_registry, voices
 
 
 def _cmd_languages() -> dict:
@@ -29,6 +29,9 @@ def _cmd_languages() -> dict:
 
 
 async def _cmd_generate(payload: dict) -> dict:
+    # Populate the live voice registry before any voice lookup.
+    await voice_registry.ensure_loaded()
+
     text = (payload.get("text") or "").strip()
     raw_language = payload.get("language") or "auto"
     gender = (payload.get("gender") or config.DEFAULT_GENDER).lower()
